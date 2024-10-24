@@ -1,0 +1,48 @@
+# Python
+*.py[cod]
+__pycache__/
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+
+# Environment variables
+.env
+*.env
+
+# Django specific
+*.egg-info/
+instance/
+.webassets-cache
+media/
+
+# Poetry
+poetry.lock
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# Pytest
+.cache/
+*.cover
+*.coverage
+nosetests.xml
+coverage.xml
+*.coveragerc
+*.hypothesis/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
