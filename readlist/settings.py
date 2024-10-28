@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'users',
     'books',
     'authors',
+    'booklist',
 ]
 
 MIDDLEWARE = [
