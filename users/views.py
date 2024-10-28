@@ -1,28 +1,8 @@
-from rest_framework import generics
+from rest_framework import viewsets
 from django.contrib.auth import get_user_model
-from users.serializer import UserSeriazer
+from users.serializers import UserSerializer
 
 
-class UserListAPIView(generics.ListAPIView):
+class UserAPIViewSet(viewsets.ModelViewSet):
     queryset = get_user_model().objects.all()
-    serializer_class = UserSeriazer
-
-
-class UserCreateAPIView(generics.CreateAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSeriazer
-
-
-class UserUpdateAPIView(generics.UpdateAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSeriazer
-
-
-class UserDeleteAPIView(generics.DestroyAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSeriazer
-
-
-class UserDetailAPIView(generics.RetrieveAPIView):
-    queryset = get_user_model().objects.all()
-    serializer_class = UserSeriazer
+    serializer_class = UserSerializer

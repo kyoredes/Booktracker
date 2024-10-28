@@ -1,10 +1,10 @@
-# from rest_framework import routers
-# from readlist.users import views
-# from django.urls import path
+from rest_framework import routers
+from users import views
+from django.urls import path, include
 
-# router = routers.DefaultRouter()
-# router.register('users', views.UserViewSet)
+router = routers.DefaultRouter()
+router.register('', views.UserAPIViewSet)
 
-# urlpattterns = [
-#     path()
-# ]
+urlpatterns = [
+    path('', include(router.urls)),
+]
