@@ -12,14 +12,17 @@ class APIUrlsTest(APITestCase):
             'pen_name': 'Pen name',
         }
         self.model_object = Author.objects.create(**self.data)
-        self.id = self.model_object.get('id')
+        self.id = self.model_object.id
 
     def test_author_get(self):
+        print('GET')
         response = self.client.get(reverse_lazy('author-list'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
+        
 
     def test_author_post(self):
+        print('POST')
         response = self.client.post(
             reverse_lazy('author-list'),
             data=self.data,
@@ -29,6 +32,7 @@ class APIUrlsTest(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_author_get_detail(self):
+        print('GET DETAIL')
         response = self.client.get(
             reverse_lazy('author-detail', kwargs={'pk': self.id}),
         )
@@ -36,18 +40,20 @@ class APIUrlsTest(APITestCase):
         self.assertEqual(len(response.data), 1)
 
     def test_author_patch_detail(self):
-        id = self.client.patch(
+        print('PATCH DETAIL')
+        obj_id = self.client.patch(
             reverse_lazy('author-detail', kwargs={'pk': self.id}),
             data={'first_name': 'New first name'},
             format='json',
         ).data['id']
         new_data = self.data['first_name'] = 'New first name'
         response = self.client.get(
-            reverse_lazy('author-detail', kwargs={'pk': id}),
+            reverse_lazy('author-detail', kwargs={'pk': obj_id}),
         )
         self.assertEqual(response.data, new_data)
 
     def test_author_put_detail(self):
+        print('PUT DETAIL')
         id = self.client.patch(
             reverse_lazy('author-detail', kwargs={'pk': self.id}),
             data={'first_name': 'New first name'},
