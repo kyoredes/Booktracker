@@ -1,11 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from booklist.models import Readlist
+from booklist.models import Booklist
 
 
 class CustomUser(AbstractUser):
     booklist = models.ManyToManyField(
-        Readlist,
+        Booklist,
         related_name='lists',
     )
 

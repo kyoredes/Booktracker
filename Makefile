@@ -5,3 +5,5 @@ m:
 	poetry run python manage.py migrate
 sh:
 	poetry run python manage.py shell
+test:
+	poetry run python manage.py test
