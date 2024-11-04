@@ -1,8 +1,11 @@
 from rest_framework import serializers
-from booklist.models import Readlist
+from booklist.models import Booklist
+from users.serializers import UserSerializer
 
 
 class BooklistSerializer(serializers.HyperlinkedModelSerializer):
+    username = UserSerializer(many=True)
+
     class Meta:
-        model = Readlist
+        model = Booklist
         fields = '__all__'

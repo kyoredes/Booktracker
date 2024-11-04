@@ -1,8 +1,10 @@
 from rest_framework import viewsets
-from booklist.models import Readlist
+from booklist.models import Booklist
 from booklist.serializers import BooklistSerializer
+from readlist.permissions import IsOwnerOrReadOnly
 
 
 class BooklistAPIViewSet(viewsets.ModelViewSet):
-    queryset = Readlist.objects.all()
+    queryset = Booklist.objects.all()
     serializer_class = BooklistSerializer
+    permission_classes = [IsOwnerOrReadOnly]
