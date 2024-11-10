@@ -1,14 +1,21 @@
 from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer
 from django.contrib.auth import get_user_model
-from books.models import Book
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        model = get_user_model()
+        fields = ['username', 'password']
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    booklist = serializers.PrimaryKeyRelatedField(
-        queryset=Book.objects.all(),
+    booklist = serializers.HyperlinkedRelatedField(
+        read_only=True,
         many=True,
+        view_name='booklist-detail',
     )
 
     class Meta:
         model = get_user_model()
-        fields = '__all__'
+        fields = ['id', 'username', 'booklist']
