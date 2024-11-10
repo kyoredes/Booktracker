@@ -6,4 +6,8 @@ m:
 sh:
 	poetry run python manage.py shell
 test:
-	poetry run python manage.py test
+	poetry run pytest -vvvvv -s
+urls:
+	poetry run python manage.py show_urls
+cache:
+	poetry run python manage.py clear_cache

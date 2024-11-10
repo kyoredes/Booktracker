@@ -16,6 +16,9 @@ psycopg2-binary = "^2.9.10"
 dj-database-url = "^2.3.0"
 djoser = "^2.2.3"
 python-dotenv = "^1.0.1"
+django-extensions = "^3.2.3"
+pytest = "^8.3.3"
+pytest-django = "^4.9.0"
 
 
 [build-system]
