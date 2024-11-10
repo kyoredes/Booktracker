@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
+    'django_extensions',
     'readlist',
     'users',
     'books',
@@ -71,11 +72,13 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-    ),
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
-
 
 ROOT_URLCONF = 'readlist.urls'
 
@@ -148,3 +151,17 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',  # Поле для входа (например, email или username)
+    'USER_ID_FIELD': 'id',
+    'USER_CREATE_PASSWORD_RETYPE': False,  # Требовать подтверждение пароля при регистрации
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',  # Ссылка для восстановления пароля
+    'ACTIVATION_URL': 'activate/{uid}/{token}',  # Ссылка для активации пользователя
+    'SEND_ACTIVATION_EMAIL': False,  # Отправлять email для активации
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CustomUserCreateSerializer',
+        'user': 'users.serializers.UserSerializer',
+    },
+}

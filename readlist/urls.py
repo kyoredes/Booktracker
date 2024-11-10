@@ -24,6 +24,5 @@ urlpatterns = [
     path('auth/', include('djoser.urls.authtoken')),
     path('books/', include('books.urls')),
     path('authors/', include('authors.urls')),
-    path('users/', include('users.urls')),
     path('booklist/', include('booklist.urls')),
 ]
