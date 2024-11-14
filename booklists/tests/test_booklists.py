@@ -14,8 +14,8 @@ def create_user(db):
         username='user',
         password='pswd',
     )
-    token = Token.objects.get_or_create(user=user)
-    return user, token
+    token, _ = Token.objects.get_or_create(user=user)
+    return user, token.key
 
 
 @pytest.fixture
@@ -25,8 +25,8 @@ def create_superuser(db):
         password='pswd',
         email=None,
     )
-    token = Token.objects.get_or_create(user=user)
-    return user, token
+    token, _ = Token.objects.get_or_create(user=user)
+    return user, token.key
 
 
 @pytest.fixture
@@ -74,7 +74,7 @@ def test_booklists_get(
     admin_response = admin_client.get(
         reverse_lazy(url)
     )
-    
+
     assert unauthenticated_response.status_code == 200
     assert authenticated_response.status_code == 200
     assert admin_response.status_code == 200
