@@ -4,7 +4,7 @@ from users.serializers import UserSerializer
 
 
 class BooklistSerializer(serializers.HyperlinkedModelSerializer):
-    username = UserSerializer(many=True)
+    creator = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Booklist
