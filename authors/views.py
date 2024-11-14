@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from authors.models import Author
 from authors.serializers import AuthorSerializer
-from readlist.permissions import IsAdminOrReadOnly
+from booktracker.permissions import IsAdminOrReadOnly
 
 
 class AuthorAPIViewSet(viewsets.ModelViewSet):

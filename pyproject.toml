@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "readlist"
+name = "booktracker"
 version = "0.1.0"
 description = ""
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 packages = [
-    { include = "readlist" }
+    { include = "booktracker" }
 ]
 
 [tool.poetry.dependencies]
