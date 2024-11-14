@@ -105,11 +105,10 @@ def test_author_get(
     admin_client,
     db,
 ):
-    response_unauthenticated = api_client.get(reverse_lazy('author-list'))
-    response_authenticated = authenticated_client.get(
-        reverse_lazy('author-list')
-    )
-    response_admin = admin_client.get(reverse_lazy('author-list'))
+    url = 'author-list'
+    response_unauthenticated = api_client.get(reverse_lazy(url))
+    response_authenticated = authenticated_client.get(reverse_lazy(url))
+    response_admin = admin_client.get(reverse_lazy(url))
 
     assert response_unauthenticated.status_code == 200
     assert response_authenticated.status_code == 200
@@ -123,18 +122,19 @@ def test_author_create(
     author_data,
     db,
 ):
+    url = 'author-list'
     response_unauthenticated = api_client.post(
-        reverse_lazy('author-list'),
+        reverse_lazy(url),
         data=author_data,
         format='json',
     )
     response_authenticated = authenticated_client.post(
-        reverse_lazy('author-list'),
+        reverse_lazy(url),
         data=author_data,
         format='json',
     )
     response_admin = admin_client.post(
-        reverse_lazy('author-list'),
+        reverse_lazy(url),
         data=author_data,
         format='json',
     )
@@ -151,18 +151,19 @@ def test_author_update_put(
     author_data,
     db,
 ):
+    url = 'author-detail'
     response_unauthenticated = api_client.put(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_data,
         format='json',
     )
     response_authenticated = authenticated_client.put(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_data,
         format='json',
     )
     response_admin = admin_client.put(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_data,
         format='json',
     )
@@ -179,18 +180,19 @@ def test_author_update_patch(
     author_patch_data,
     author_patch_expected,
 ):
+    url = 'author-detail'
     response_unauthenticated = api_client.patch(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_patch_data,
         format='json',
     )
     response_authenticated = authenticated_client.patch(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_patch_data,
         format='json',
     )
     response_admin = admin_client.patch(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id}),
+        reverse_lazy(url, kwargs={'pk': author_create.id}),
         data=author_patch_data,
         format='json',
     )
@@ -212,14 +214,15 @@ def test_author_delete(
     admin_client,
     author_create,
 ):
+    url = 'author-detail'
     response_unauthenicated = api_client.delete(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id})
+        reverse_lazy(url, kwargs={'pk': author_create.id})
     )
     response_authenticated = authenticated_client.delete(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id})
+        reverse_lazy(url, kwargs={'pk': author_create.id})
     )
     response_admin = admin_client.delete(
-        reverse_lazy('author-detail', kwargs={'pk': author_create.id})
+        reverse_lazy(url, kwargs={'pk': author_create.id})
     )
 
     assert response_unauthenicated.status_code == 401
