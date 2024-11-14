@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from booklist.models import Booklist
+from booklists.models import Booklist
 
 
 class CustomUser(AbstractUser):

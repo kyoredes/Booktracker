@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from booklist.models import Booklist
-from booklist.serializers import BooklistSerializer
+from booklists.models import Booklist
+from booklists.serializers import BooklistSerializer
 from booktracker.permissions import IsOwnerOrReadOnly
 
 

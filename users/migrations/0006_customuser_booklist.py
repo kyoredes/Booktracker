@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('booklist', '0001_initial'),
+        ('booklists', '0001_initial'),
         ('users', '0005_remove_customuser_booklist'),
     ]
 
@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customuser',
             name='booklist',
-            field=models.ManyToManyField(blank=True, related_name='lists', to='booklist.booklist'),
+            field=models.ManyToManyField(blank=True, related_name='lists', to='booklists.booklist'),
         ),
     ]
