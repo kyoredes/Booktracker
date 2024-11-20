@@ -4,10 +4,11 @@ from booklists.models import Booklist
 
 
 class CustomUser(AbstractUser):
-    booklist = models.ManyToManyField(
+    booklist = models.ForeignKey(
         Booklist,
-        related_name='lists',
+        related_name='booklists',
         blank=True,
+        on_delete=models.CASCADE,
     )
 
     def __str__(self):
