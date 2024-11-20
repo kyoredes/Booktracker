@@ -1,10 +1,9 @@
 from rest_framework import serializers
 from books.models import Book
-from authors.serializers import AuthorSerializer
 
 
 class BookSerializer(serializers.HyperlinkedModelSerializer):
-    authors = AuthorSerializer(many=True)
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Book
