@@ -9,7 +9,7 @@ class Booklist(models.Model):
         Book,
         related_name='books',
     )
-    user = models.ForeignKey(
+    owner = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
     )
