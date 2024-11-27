@@ -1,0 +1,16 @@
+services:
+  web:
+    build:
+      context: .
+    env_file:
+      - .env
+    ports: 
+      - "8000:8000"
+    container_name: booktracker
+    command: poetry run python manage.py runserver 0.0.0.0:8000
+  elasticsearch:
+    image: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"

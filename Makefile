@@ -15,3 +15,5 @@ urls:
 	poetry run python manage.py show_urls
 cache:
 	poetry run python manage.py clear_cache
+docker:
+	docker run -it -p 8000:8000 booktracker
