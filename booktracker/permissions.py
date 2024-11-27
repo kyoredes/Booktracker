@@ -5,7 +5,8 @@ class IsOwnerOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
-        return obj.booklists.username == request.user
+        if hasattr(obj, 'owner'):
+            return obj.owner == request.user
 
 
 class IsAdminOrReadOnly(BasePermission):
