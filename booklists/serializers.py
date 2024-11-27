@@ -3,7 +3,7 @@ from booklists.models import Booklist
 
 
 class BooklistSerializer(serializers.HyperlinkedModelSerializer):
-    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    owner = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Booklist
