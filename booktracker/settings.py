@@ -24,18 +24,21 @@ DJANGO_SETTINGS_MODULE = 'booktracker.settings'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
+SEARCH_ENGINE = 'elasticsearch'
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 DATABASE_URL = os.getenv('DATABASE_URL')
-
+ELASTIC_PASSWORD = os.getenv('ELASTIC_PASSWORD')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 
 APPEND_SLASH = True
@@ -60,6 +63,8 @@ INSTALLED_APPS = [
     'books',
     'authors',
     'booklists',
+    'django_elasticsearch_dsl',
+    'elasticsearch_dsl',
 ]
 
 MIDDLEWARE = [
@@ -79,9 +84,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_FILTER_BACKENDS': [
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
 
 }
 
@@ -168,5 +172,13 @@ DJOSER = {
     'SERIALIZERS': {
         'user_create': 'users.serializers.CustomUserCreateSerializer',
         'user': 'users.serializers.UserSerializer',
+    },
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'https://localhost:9200',
+        'http_auth': ('elastic', ELASTIC_PASSWORD),
+        'ca_certs': 'http_ca.crt',
     },
 }

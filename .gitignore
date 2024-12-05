@@ -46,3 +46,6 @@ coverage.xml
 Thumbs.db
 ehthumbs.db
 Icon?
+
+# elasticsearch
+http_ca.crt

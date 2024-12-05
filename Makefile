@@ -16,4 +16,10 @@ urls:
 cache:
 	poetry run python manage.py clear_cache
 docker:
-	docker run -it -p 8000:8000 booktracker
+	docker kill booktracker
+	docker rm booktracker
+	docker build -t booktracker .
+	docker run -it -d -p 8000:8000  --name booktracker booktracker
+	docker exec -it booktracker /bin/bash
+indx:
+	poetry run python manage.py search_index --rebuild
