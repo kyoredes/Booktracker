@@ -8,11 +8,21 @@ services:
       - "8000:8000"
     container_name: booktracker
     command: poetry run python manage.py runserver 0.0.0.0:8000
-  elasticsearch:
-    image: elasticsearch
+    networks:
+      - default
+
+  es02:
+    image: elasticsearch:8.16.1
+    container_name: elasticsearch
     environment:
       - discovery.type=single-node
+      - xpack.security.enabled=false
+      - xpack.security.http.ssl.enabled=false
     ports:
       - "9200:9200"
     networks:
       - default
+
+networks:
+  default:
+    driver: bridge
