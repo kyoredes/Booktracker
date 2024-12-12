@@ -5,13 +5,14 @@ from books.serializers import BookSerializer
 from rest_framework.views import APIView
 from books.models import Book
 from booktracker.permissions import IsAdminOrReadOnly
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import LimitOffsetPagination
 
 
 class BookAPIViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
     search_fields = ['title', 'description', 'author']
     # filter_backends = []
 
