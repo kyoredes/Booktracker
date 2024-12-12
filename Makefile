@@ -11,6 +11,8 @@ test-authors:
 	poetry run pytest -vvvvv -s authors
 test-booklists:
 	poetry run pytest -vvvvv -s booklists
+test-books:
+	poetry run pytest -vvvvv -s books
 urls:
 	poetry run python manage.py show_urls
 cache:
