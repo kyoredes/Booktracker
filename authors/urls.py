@@ -3,8 +3,8 @@ from rest_framework import routers
 from authors.views import AuthorAPIViewSet
 
 router = routers.DefaultRouter()
-router.register('', AuthorAPIViewSet)
+router.register("", AuthorAPIViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path("", include(router.urls)),
 ]

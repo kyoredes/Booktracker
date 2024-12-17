@@ -5,7 +5,6 @@ import pytest
 from books.models import Book
 from authors.models import Author
 from rest_framework.authtoken.models import Token
-from booklists.models import Booklist
 
 
 # ========PYTEST FIXTURES=========
@@ -13,8 +12,8 @@ from booklists.models import Booklist
 @pytest.fixture
 def create_user(db):
     user = get_user_model().objects.create_user(
-        username='testuser',
-        password='123'
+        username="testuser",
+        password="123",
     )
     token, _ = Token.objects.get_or_create(user=user)
     # print('TOKEN', token)
@@ -25,8 +24,8 @@ def create_user(db):
 @pytest.fixture
 def create_another_user(db):
     user = get_user_model().objects.create_user(
-        username='another-test-user',
-        password='1234',
+        username="another-test-user",
+        password="1234",
     )
     token, _ = Token.objects.get_or_create(user=user)
     return user, token.key
@@ -35,12 +34,13 @@ def create_another_user(db):
 @pytest.fixture
 def create_superuser(db):
     user = get_user_model().objects.create_superuser(
-        username='admin',
-        password='pswd',
+        username="admin",
+        password="pswd",
         email=None,
     )
     token, _ = Token.objects.get_or_create(user=user)
     return user, token
+
 
 # ========PYTEST FIXTURES=========
 # ========CLIENTS========
@@ -55,7 +55,7 @@ def unauthenticated_client():
 def authenticated_client(create_user):
     api_client = APIClient()
     user, token = create_user
-    token_str = 'Token ' + token
+    token_str = "Token " + token
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
 
@@ -64,7 +64,7 @@ def authenticated_client(create_user):
 def another_authenticated_client(create_another_user):
     api_client = APIClient()
     user, token = create_another_user
-    token_str = 'Token ' + token
+    token_str = "Token " + token
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
 
@@ -73,9 +73,10 @@ def another_authenticated_client(create_another_user):
 def admin_client(create_superuser):
     api_client = APIClient()
     user, token = create_superuser
-    token_str = 'Token ' + token.key
+    token_str = "Token " + token.key
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
+
 
 # ========PYTEST FIXTURES=========
 # ========OBJECTS========
@@ -84,9 +85,9 @@ def admin_client(create_superuser):
 @pytest.fixture
 def create_author(db):
     return Author.objects.create(
-        first_name='sdf',
-        last_name='sd',
-        pen_name='dsf',
+        first_name="sdf",
+        last_name="sd",
+        pen_name="dsf",
     )
 
 
@@ -94,11 +95,12 @@ def create_author(db):
 def book_create(db, create_author):
     book = Book.objects.create(
         id=1,
-        name='name',
-        description='sdf',
+        name="name",
+        description="sdf",
     )
     book.author.set([create_author])
     return book
+
 
 # ========PYTEST FIXTURES=========
 # ========DATA========
@@ -107,27 +109,29 @@ def book_create(db, create_author):
 @pytest.fixture
 def book_patch_data():
     return {
-        'name': 'new_name',
+        "name": "new_name",
     }
 
 
 @pytest.fixture
 def book_patch_expected(book_create):
     return {
-        'id': book_create.id,
-        'name': 'new_name',
-        'description': 'sdf',
+        "id": book_create.id,
+        "name": "new_name",
+        "description": "sdf",
     }
 
 
 @pytest.fixture
 def book_data(create_author):
-    author_url = reverse_lazy('author-detail', kwargs={'pk': create_author.id})
+    author_url = reverse_lazy("author-detail", kwargs={"pk": create_author.id})
     return {
-        'name': 'testbook',
-        'description': 'testdesc',
-        'author': [author_url],
+        "name": "testbook",
+        "description": "testdesc",
+        "author": [author_url],
     }
+
+
 # =======TESTS=======
 
 
@@ -136,16 +140,10 @@ def test_books_get(
     authenticated_client,
     admin_client,
 ):
-    url = 'book-list'
-    response_unauthenticated = unauthenticated_client.get(
-        reverse_lazy(url)
-    )
-    response_authenticated = authenticated_client.get(
-        reverse_lazy(url)
-    )
-    response_admin = admin_client.get(
-        reverse_lazy(url)
-    )
+    url = "book-list"
+    response_unauthenticated = unauthenticated_client.get(reverse_lazy(url))
+    response_authenticated = authenticated_client.get(reverse_lazy(url))
+    response_admin = admin_client.get(reverse_lazy(url))
 
     assert response_unauthenticated.status_code == 401
     assert response_authenticated.status_code == 200
@@ -158,23 +156,23 @@ def test_books_create(
     admin_client,
     book_data,
 ):
-    url = 'book-list'
+    url = "book-list"
     response_unauthenticated = unauthenticated_client.post(
         reverse_lazy(url),
         data=book_data,
-        format='json',
+        format="json",
     )
     response_authenticated = authenticated_client.post(
         reverse_lazy(url),
         data=book_data,
-        format='json',
+        format="json",
     )
     response_admin = admin_client.post(
         reverse_lazy(url),
         data=book_data,
-        format='json',
+        format="json",
     )
-    print('RESPADM///////////////////////////////', response_admin.data)
+    print("RESPADM///////////////////////////////", response_admin.data)
 
     assert response_unauthenticated.status_code == 401
     assert response_authenticated.status_code == 403
@@ -189,22 +187,22 @@ def test_books_update_put(
     book_data,
     db,
 ):
-    url = 'book-detail'
+    url = "book-detail"
 
     response_unauthenticated = unauthenticated_client.put(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_data,
-        format='json',
+        format="json",
     )
     response_authenticated = authenticated_client.put(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_data,
-        format='json',
+        format="json",
     )
     response_admin = admin_client.put(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_data,
-        format='json',
+        format="json",
     )
 
     assert response_unauthenticated.status_code == 401
@@ -220,25 +218,23 @@ def test_books_update_patch(
     book_patch_data,
     book_patch_expected,
 ):
-    url = 'book-detail'
+    url = "book-detail"
     response_unauthenticated = unauthenticated_client.patch(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_patch_data,
-        format='json',
+        format="json",
     )
     response_authenticated = authenticated_client.patch(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_patch_data,
-        format='json',
+        format="json",
     )
     response_admin = admin_client.patch(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
+        reverse_lazy(url, kwargs={"pk": book_create.id}),
         data=book_patch_data,
-        format='json',
+        format="json",
     )
-    res_actual = Book.objects.filter(
-        id=book_create.id
-    ).values().first()
+    res_actual = Book.objects.filter(id=book_create.id).values().first()
 
     assert response_unauthenticated.status_code == 401
     assert response_authenticated.status_code == 403
@@ -253,15 +249,15 @@ def test_books_delete(
     admin_client,
     book_create,
 ):
-    url = 'book-detail'
+    url = "book-detail"
     response_unauthenicated = unauthenticated_client.delete(
-        reverse_lazy(url, kwargs={'pk': book_create.id})
+        reverse_lazy(url, kwargs={"pk": book_create.id})
     )
     response_admin = admin_client.delete(
-        reverse_lazy(url, kwargs={'pk': book_create.id})
+        reverse_lazy(url, kwargs={"pk": book_create.id})
     )
     response_authenticated = authenticated_client.delete(
-        reverse_lazy(url, kwargs={'pk': book_create.id})
+        reverse_lazy(url, kwargs={"pk": book_create.id})
     )
 
     assert response_unauthenicated.status_code == 401

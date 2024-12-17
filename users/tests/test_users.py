@@ -5,17 +5,16 @@ import pytest
 from books.models import Book
 from authors.models import Author
 from rest_framework.authtoken.models import Token
-from booklists.models import Booklist
 
 
 # ========PYTEST FIXTURES=========
 # ========USERS========
 @pytest.fixture
 def create_user(db):
-    pswd = '123'
+    pswd = "123"
     user = get_user_model().objects.create_user(
-        username='testuser',
-        password=pswd
+        username="testuser",
+        password=pswd,
     )
     token, _ = Token.objects.get_or_create(user=user)
     return user, token.key, pswd
@@ -23,9 +22,9 @@ def create_user(db):
 
 @pytest.fixture
 def create_another_user(db):
-    pswd = '1234'
+    pswd = "1234"
     user = get_user_model().objects.create_user(
-        username='another-test-user',
+        username="another-test-user",
         password=pswd,
     )
     token, _ = Token.objects.get_or_create(user=user)
@@ -34,14 +33,15 @@ def create_another_user(db):
 
 @pytest.fixture
 def create_superuser(db):
-    pswd = 'pswd'
+    pswd = "pswd"
     user = get_user_model().objects.create_superuser(
-        username='admin',
+        username="admin",
         password=pswd,
         email=None,
     )
     token, _ = Token.objects.get_or_create(user=user)
     return user, token, pswd
+
 
 # ========PYTEST FIXTURES=========
 # ========CLIENTS========
@@ -56,8 +56,8 @@ def unauthenticated_client():
 def authenticated_client(create_user):
     api_client = APIClient()
     user, token, _ = create_user
-    token_str = 'Token ' + token
-    print('TOKEn///////////////////////////////////', token_str)
+    token_str = "Token " + token
+    print("TOKEn///////////////////////////////////", token_str)
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
 
@@ -66,7 +66,7 @@ def authenticated_client(create_user):
 def another_authenticated_client(create_another_user):
     api_client = APIClient()
     user, token, _ = create_another_user
-    token_str = 'Token ' + token
+    token_str = "Token " + token
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
 
@@ -75,9 +75,10 @@ def another_authenticated_client(create_another_user):
 def admin_client(create_superuser):
     api_client = APIClient()
     user, token, _ = create_superuser
-    token_str = 'Token ' + token.key
+    token_str = "Token " + token.key
     api_client.credentials(HTTP_AUTHORIZATION=token_str)
     return api_client
+
 
 # ========PYTEST FIXTURES=========
 # ========OBJECTS========
@@ -86,9 +87,9 @@ def admin_client(create_superuser):
 @pytest.fixture
 def create_author(db):
     return Author.objects.create(
-        first_name='sdf',
-        last_name='sd',
-        pen_name='dsf',
+        first_name="sdf",
+        last_name="sd",
+        pen_name="dsf",
     )
 
 
@@ -96,11 +97,12 @@ def create_author(db):
 def book_create(db, create_author):
     book = Book.objects.create(
         id=1,
-        name='name',
-        description='sdf',
+        name="name",
+        description="sdf",
     )
     book.author.set([create_author])
     return book
+
 
 # ========PYTEST FIXTURES=========
 # ========DATA========
@@ -109,24 +111,26 @@ def book_create(db, create_author):
 @pytest.fixture
 def user_patch_data():
     return {
-        'username': 'new_name',
+        "username": "new_name",
     }
 
 
 @pytest.fixture
 def user_patch_expected(create_user):
     return {
-        'id': create_user[0].id,
-        'username': 'new_name',
+        "id": create_user[0].id,
+        "username": "new_name",
     }
 
 
 @pytest.fixture
 def user_data():
     return {
-        'username': '1234',
-        'password': '123',
+        "username": "1234",
+        "password": "123",
     }
+
+
 # =======TESTS=======
 
 
@@ -135,16 +139,10 @@ def test_users_get(
     authenticated_client,
     admin_client,
 ):
-    url = 'customuser-list'
-    response_unauthenticated = unauthenticated_client.get(
-        reverse_lazy(url)
-    )
-    response_authenticated = authenticated_client.get(
-        reverse_lazy(url)
-    )
-    response_admin = admin_client.get(
-        reverse_lazy(url)
-    )
+    url = "customuser-list"
+    response_unauthenticated = unauthenticated_client.get(reverse_lazy(url))
+    response_authenticated = authenticated_client.get(reverse_lazy(url))
+    response_admin = admin_client.get(reverse_lazy(url))
 
     assert response_unauthenticated.status_code == 401
     assert response_authenticated.status_code == 200
@@ -156,11 +154,11 @@ def test_users_create_unauth(
     user_data,
     db,
 ):
-    url = 'customuser-list'
+    url = "customuser-list"
     response_unauthenticated = unauthenticated_client.post(
         reverse_lazy(url),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_unauthenticated.status_code == 201
 
@@ -170,11 +168,11 @@ def test_users_create_auth(
     user_data,
     db,
 ):
-    url = 'customuser-list'
+    url = "customuser-list"
     response_authenticated = authenticated_client.post(
         reverse_lazy(url),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_authenticated.status_code == 201
 
@@ -184,11 +182,11 @@ def test_user_create_admin(
     user_data,
     db,
 ):
-    url = 'customuser-list'
+    url = "customuser-list"
     response_admin = admin_client.post(
         reverse_lazy(url),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_admin.status_code == 201
 
@@ -197,13 +195,13 @@ def test_users_update_put_unauth(
     unauthenticated_client,
     create_user,
     user_data,
-    db
+    db,
 ):
-    url = 'customuser-detail'
+    url = "customuser-detail"
     response_unauthenticated = unauthenticated_client.put(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_unauthenticated.status_code == 401
 
@@ -215,11 +213,11 @@ def test_users_update_put_auth(
     user_data,
     db,
 ):
-    url = 'customuser-detail'
+    url = "customuser-detail"
     response_authenticated = another_authenticated_client.put(
-        reverse_lazy(url, kwargs={'id': create_another_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_another_user[0].id}),
         data=user_data,
-        format='json',
+        format="json",
     )
 
     assert response_authenticated.status_code == 200
@@ -231,25 +229,21 @@ def test_users_update_put_auth_owner(
     user_data,
     db,
 ):
-    url = 'customuser-detail'
+    url = "customuser-detail"
     response_authenticated_owner = authenticated_client.put(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_authenticated_owner.status_code == 200
 
 
-def test_users_update_put_admin(
-    admin_client,
-    user_data,
-    create_user
-):
-    url = 'customuser-detail'
+def test_users_update_put_admin(admin_client, user_data, create_user):
+    url = "customuser-detail"
     response_admin = admin_client.put(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_data,
-        format='json',
+        format="json",
     )
     assert response_admin.status_code == 200
 
@@ -263,37 +257,36 @@ def test_users_update_patch(
     user_patch_data,
     user_patch_expected,
 ):
-    url = 'customuser-detail'
+    url = "customuser-detail"
     response_unauthenticated = unauthenticated_client.patch(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_patch_data,
-        format='json',
+        format="json",
     )
     response_authenticated_owner = authenticated_client.patch(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_patch_data,
-        format='json',
+        format="json",
     )
     response_authenticated = another_authenticated_client.patch(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_patch_data,
-        format='json',
+        format="json",
     )
     response_admin = admin_client.patch(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
         data=user_patch_data,
-        format='json',
+        format="json",
     )
-    res_actual = get_user_model().objects.filter(
-        id=create_user[0].id
-    ).values().first()
+    user_object = get_user_model().objects.filter(id=create_user[0].id)
+    res_actual = user_object.values().first()
 
     assert response_unauthenticated.status_code == 401
     assert response_authenticated.status_code == 404
     assert response_authenticated_owner.status_code == 200
     assert response_admin.status_code == 200
-    assert res_actual['id'] == user_patch_expected['id']
-    assert res_actual['username'] == user_patch_expected['username']
+    assert res_actual["id"] == user_patch_expected["id"]  # type: ignore
+    assert res_actual["username"] == user_patch_expected["username"]  # type: ignore  # noqa: E501
 
 
 def test_users_delete(
@@ -303,29 +296,29 @@ def test_users_delete(
     admin_client,
     create_user,
     create_another_user,
-    create_superuser
+    create_superuser,
 ):
-    url = 'customuser-detail'
+    url = "customuser-detail"
     response_unauthenicated = unauthenticated_client.delete(
-        reverse_lazy(url, kwargs={'id': create_user[0].id})
+        reverse_lazy(url, kwargs={"id": create_user[0].id})
     )
     response_authenticated = another_authenticated_client.delete(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
-        data={'current_password': create_another_user[2]}
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
+        data={"current_password": create_another_user[2]},
     )
 
     response_authenticated_owner = authenticated_client.delete(
-        reverse_lazy(url, kwargs={'id': create_user[0].id}),
-        data={'current_password': create_user[2]}
+        reverse_lazy(url, kwargs={"id": create_user[0].id}),
+        data={"current_password": create_user[2]},
     )
     response_admin = admin_client.delete(
-        reverse_lazy(url, kwargs={'id': create_another_user[0].id}),
-        data={'current_password': create_superuser[2]}
+        reverse_lazy(url, kwargs={"id": create_another_user[0].id}),
+        data={"current_password": create_superuser[2]},
     )
     assert response_unauthenicated.status_code == 401
-    print('//////////////////', response_authenticated.data)
+    print("//////////////////", response_authenticated.data)
     assert response_authenticated.status_code == 403
-    print('OWNER////////', response_authenticated_owner.data)
+    print("OWNER////////", response_authenticated_owner.data)
     assert response_authenticated_owner.status_code == 204
     print(response_admin.data)
     assert response_admin.status_code == 204

@@ -13,7 +13,7 @@ class BookAPIViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAdminOrReadOnly, IsAuthenticated]
-    search_fields = ['title', 'description', 'author']
+    search_fields = ["title", "description", "author"]
     # filter_backends = []
 
 
@@ -22,20 +22,26 @@ class BookSearchView(APIView, LimitOffsetPagination):
     search_document = BookDocument
 
     def get(self, request):
-        print('/////////QUERY')
-        query = request.query_params.get('q', None)
+        print("/////////QUERY")
+        query = request.query_params.get("q", None)
         print(query)
-        print('/////////QUERY')
+        print("/////////QUERY")
         if query:
-            print('SEARCH')
-            search = self.search_document.search().query("multi_match", query=query, fields=['name', 'description', 'author'])
+            print("SEARCH")
+            search = self.search_document.search().query(
+                "multi_match",
+                query=query,
+                fields=["name", "description", "author"],
+            )
             print(search)
             print("SEARCH")
-            print('RESP')
+            print("RESP")
             response = search.execute()
             print(response)
-            print('RESP')
+            print("RESP")
             result = self.paginate_queryset(response, request, view=self)
-            serializer = self.serializer_class(result, many=True, context={'request': request})
+            serializer = self.serializer_class(
+                result, many=True, context={"request": request}
+            )
             return self.get_paginated_response(serializer.data)
-        return Response({'error': 'Search query is required'}, status=400)
+        return Response({"error": "Search query is required"}, status=400)
