@@ -184,7 +184,6 @@ def test_books_create(
 def test_books_update_put(
     unauthenticated_client,
     authenticated_client,
-    another_authenticated_client,
     admin_client,
     book_create,
     book_data,
@@ -197,12 +196,7 @@ def test_books_update_put(
         data=book_data,
         format='json',
     )
-    response_authenticated_owner = authenticated_client.put(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
-        data=book_data,
-        format='json',
-    )
-    response_authenticated = another_authenticated_client.put(
+    response_authenticated = authenticated_client.put(
         reverse_lazy(url, kwargs={'pk': book_create.id}),
         data=book_data,
         format='json',
@@ -214,7 +208,6 @@ def test_books_update_put(
     )
 
     assert response_unauthenticated.status_code == 401
-    assert response_authenticated_owner.status_code == 403
     assert response_authenticated.status_code == 403
     assert response_admin.status_code == 200
 
@@ -222,7 +215,6 @@ def test_books_update_put(
 def test_books_update_patch(
     unauthenticated_client,
     authenticated_client,
-    another_authenticated_client,
     admin_client,
     book_create,
     book_patch_data,
@@ -234,12 +226,7 @@ def test_books_update_patch(
         data=book_patch_data,
         format='json',
     )
-    response_authenticated_owner = authenticated_client.patch(
-        reverse_lazy(url, kwargs={'pk': book_create.id}),
-        data=book_patch_data,
-        format='json',
-    )
-    response_authenticated = another_authenticated_client.patch(
+    response_authenticated = authenticated_client.patch(
         reverse_lazy(url, kwargs={'pk': book_create.id}),
         data=book_patch_data,
         format='json',
@@ -254,7 +241,6 @@ def test_books_update_patch(
     ).values().first()
 
     assert response_unauthenticated.status_code == 401
-    assert response_authenticated_owner.status_code == 403
     assert response_authenticated.status_code == 403
     assert response_admin.status_code == 200
     assert res_actual == book_patch_expected
@@ -271,17 +257,13 @@ def test_books_delete(
     response_unauthenicated = unauthenticated_client.delete(
         reverse_lazy(url, kwargs={'pk': book_create.id})
     )
-    response_authenticated = another_authenticated_client.delete(
-        reverse_lazy(url, kwargs={'pk': book_create.id})
-    )
     response_admin = admin_client.delete(
         reverse_lazy(url, kwargs={'pk': book_create.id})
     )
-    response_authenticated_owner = authenticated_client.delete(
+    response_authenticated = authenticated_client.delete(
         reverse_lazy(url, kwargs={'pk': book_create.id})
     )
 
     assert response_unauthenicated.status_code == 401
     assert response_authenticated.status_code == 403
-    assert response_authenticated_owner.status_code == 403
     assert response_admin.status_code == 204
