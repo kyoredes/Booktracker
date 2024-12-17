@@ -1,6 +1,6 @@
-s:
+dev:
 	poetry run python manage.py runserver
-m:
+migrate:
 	poetry run python manage.py makemigrations
 	poetry run python manage.py migrate
 sh:
