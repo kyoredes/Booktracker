@@ -13,6 +13,8 @@ test-booklists:
 	poetry run pytest -vvvvv -s booklists
 test-books:
 	poetry run pytest -vvvvv -s books
+test-users:
+	poetry run pytest -vvvvv -s users
 urls:
 	poetry run python manage.py show_urls
 cache:
