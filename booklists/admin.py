@@ -1,3 +1,4 @@
 from django.contrib import admin
+from booklists.models import Booklist
 
-# Register your models here.
+admin.site.register(Booklist)
