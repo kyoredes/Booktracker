@@ -7,18 +7,26 @@ from books.models import Book
 class BookDocument(Document):
     name = fields.TextField()
     description = fields.TextField()
-    author = fields.KeywordField(multi=True)
-
-    @property
-    def pk(self):
-        return self.meta.id
+    author = fields.ObjectField(
+        properties={
+            "first_name": fields.TextField(),
+            "last_name": fields.TextField(),
+        }
+    )
 
     class Index:
-        name = 'books'
+        name = "books"
 
     class Django:
         model = Book
-        fields = ['id']
+        fields = ["id"]
 
-    def prepare_author(self, instance):
-        return list(instance.author.values_list('first_name', 'last_name'))
+    def prepare_authors(self, instance):
+        return [
+            {
+                "id": author.id,
+                "first_name": author.first_name,
+                "last_name": author.last_name,
+            }
+            for author in instance.authors.all()
+        ]

@@ -1,7 +1,7 @@
 from rest_framework import viewsets
 from books.documents import BookDocument
 from rest_framework.response import Response
-from books.serializers import BookSerializer
+from books.serializers import BookSearchSerializer, BookSerializer
 from rest_framework.views import APIView
 from books.models import Book
 from booktracker.permissions import IsAdminOrReadOnly
@@ -18,27 +18,30 @@ class BookAPIViewSet(viewsets.ModelViewSet):
 
 
 class BookSearchView(APIView, LimitOffsetPagination):
-    serializer_class = BookSerializer
+    serializer_class = BookSearchSerializer
     search_document = BookDocument
 
     def get(self, request):
-        print("/////////QUERY")
         query = request.query_params.get("q", None)
-        print(query)
-        print("/////////QUERY")
         if query:
-            print("SEARCH")
+
             search = self.search_document.search().query(
                 "multi_match",
                 query=query,
                 fields=["name", "description", "author"],
             )
-            print(search)
-            print("SEARCH")
-            print("RESP")
+
             response = search.execute()
-            print(response)
-            print("RESP")
+
+            hits = [
+                {
+                    "id": hit.meta.id,
+                    "name": hit.name,
+                    "description": hit.description,
+                    "author": hit.author,
+                }
+                for hit in response
+            ]
             result = self.paginate_queryset(response, request, view=self)
             serializer = self.serializer_class(
                 result, many=True, context={"request": request}
