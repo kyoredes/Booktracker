@@ -184,8 +184,12 @@ DJOSER = {
 
 ELASTICSEARCH_DSL = {
     "default": {
-        "hosts": "https://localhost:9200",
-        "http_auth": ("elastic", ELASTIC_PASSWORD),
-        "ca_certs": "http_ca.crt",
+        "hosts": "http://elasticsearch:9200",
+        # "http_auth": ("elastic", ELASTIC_PASSWORD),
+        # "ca_certs": "http_ca.crt",
     },
 }
+
+CELERY_BROCKER_URL = "redis://redis:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
