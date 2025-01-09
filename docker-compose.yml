@@ -13,7 +13,7 @@ services:
     ports:
       - "8000:8000"
     container_name: booktracker
-    command: poetry run python manage.py runserver 0.0.0.0:8000
+    command: uv run python manage.py runserver 0.0.0.0:8000
     networks:
       - default
     depends_on:
@@ -33,7 +33,7 @@ services:
   celery:
     build:
       context: .
-    command: poetry run celery -A booktracker worker --loglevel=info
+    command: uv run celery -A booktracker worker --loglevel=info
     depends_on:
       - redis
     volumes:
