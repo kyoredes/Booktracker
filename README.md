@@ -26,9 +26,8 @@ BookTracker is a RESTful API project built with Django REST Framework (DRF). It 
 
 ### Prerequisites
 - Python 3
-- pip
 - PostgreSQL
-- Poetry
+- uv
 
 ### Steps
 1. Clone the repository:
@@ -39,13 +38,12 @@ BookTracker is a RESTful API project built with Django REST Framework (DRF). It 
 
 2. Create a virtual environment and activate it:
    ```bash
-   poetry init
-   poetry check
+   uv init
    ```
 
 3. Install dependencies:
    ```bash
-   poetry install
+   uv sync
    ```
 
 4. Configure the database in the `.env` file:
